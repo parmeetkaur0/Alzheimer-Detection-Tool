@@ -1,0 +1,11 @@
+# Node.js
+node-backend/node_modules
+client/node_modules
+
+# Python (Flask)
+flask-backend/__pycache__
+flask-backend/venv
+flask-backend/*.pyc
+
+# Environment files
+*.env
