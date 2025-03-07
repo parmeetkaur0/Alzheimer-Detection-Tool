@@ -1,0 +1,4 @@
+.env
+congig/serviceAccountKey.json
+uploads
+node modules

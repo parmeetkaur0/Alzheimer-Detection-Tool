@@ -10,36 +10,36 @@ const Profile = () => {
   const [error, setError] = useState("");
 
   
-  useEffect(() => {
-    console.log("User ID:", user?.uid);
+//   useEffect(() => {
+//     console.log("User ID:", user?.uid);
 
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/patients/${user?.uid}`, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        console.log("API Response:", response.data);
-        setProfile(response.data);
-      } catch (error) {
-        console.error(error);  // Log error for debugging
-        setError("Failed to fetch profile information. Please try again.");
-      }
-    };
+//     const fetchProfile = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:5000/patients/${user?.uid}`, {
+//           headers: {
+//             'Content-Type': 'application/json'
+//           }
+//         });
+//         console.log("API Response:", response.data);
+//         setProfile(response.data);
+//       } catch (error) {
+//         console.error(error);  // Log error for debugging
+//         setError("Failed to fetch profile information. Please try again.");
+//       }
+//     };
 
-    if (user?.uid) {  // Check if user ID is available
-      fetchProfile();
-    }
-}, [user?.id]);
+//     if (user?.uid) {  // Check if user ID is available
+//       fetchProfile();
+//     }
+// }, [user?.id]);
 
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
+//   if (error) {
+//     return <p className="text-red-500">{error}</p>;
+//   }
 
-  if (!profile) {
-    return <p>Loading...</p>;
-  }
+//   if (!profile) {
+//     return <p>Loading...</p>;
+//   }
 
   return (
     <div className="flex flex-col min-h-screen">
