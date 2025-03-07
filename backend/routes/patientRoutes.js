@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const patient = await Patient.findById(req.params.id);
+    const patient = await Patient.findById({uid: req.params.uid});
     if (!patient) {
       return res.status(404).send({ error: 'Patient not found' });
     }   

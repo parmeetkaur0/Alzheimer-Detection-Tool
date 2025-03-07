@@ -1,4 +1,3 @@
-// src/context/AuthContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config/firebase.config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -11,19 +10,22 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(null);  // State to store JWT token
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const token = await firebaseUser.getIdToken();  // Get Firebase ID token
-        
-        // Send user info to backend to save in MongoDB
+        const idToken = await firebaseUser.getIdToken();  
+        setToken(idToken);  
+
         try {
-          const response = await axios.post("http://localhost:5000/api/users", {
+          // Store user info in backend if not exists
+          const response = await axios.post("http://localhost:5000/api/auth/user", {
             uid: firebaseUser.uid,
+            name:firebaseUser.displayName,
             email: firebaseUser.email,
           }, {
-            headers: { Authorization: `Bearer ${token}` }  // Send token to backend
+            headers: { Authorization: `Bearer ${idToken}` } 
           });
 
           console.log("User saved to backend:", response.data);
@@ -32,8 +34,10 @@ export const AuthProvider = ({ children }) => {
         }
 
         setUser(firebaseUser);
+
       } else {
         setUser(null);
+        setToken(null);  
       }
       setLoading(false);
     });
@@ -41,10 +45,15 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const logout = () => signOut(auth);
+  // Function to log out user
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null);
+    setToken(null);  // Clear token on logout
+  };
 
   return (
-    <AuthContext.Provider value={{ user, logout }}>
+    <AuthContext.Provider value={{ user, logout, token }}>
       {!loading && children}
     </AuthContext.Provider>
   );

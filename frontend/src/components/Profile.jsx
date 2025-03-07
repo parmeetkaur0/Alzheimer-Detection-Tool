@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/authContext";
-import Header from "./Header";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
@@ -16,7 +15,7 @@ const Profile = () => {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/patients/${user.uid}`, {
+        const response = await axios.get(`http://localhost:5000/patients/${user?.uid}`, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -49,8 +48,8 @@ const Profile = () => {
       <main className="flex flex-col items-center justify-center flex-grow p-4">
         <h2 className="text-2xl mb-4 text-[#0E9272]">Profile</h2>
         <div className="w-full max-w-lg bg-white p-6 rounded shadow-md">
-          <p><strong>Full Name:</strong> {profile.fullName}</p>
-          <p><strong>Email:</strong> {profile.email}</p>
+          <p><strong>Full Name:</strong> {user?.displayName}</p>
+          <p><strong>Email:</strong> {user?.email}</p>
           <p><strong>Gender:</strong> {profile.gender}</p>
           <p><strong>Blood Group:</strong> {profile.bloodGroup}</p>
           <p><strong>Age:</strong> {profile.age}</p>
