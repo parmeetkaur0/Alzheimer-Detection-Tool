@@ -9,3 +9,5 @@ flask-backend/*.pyc
 
 # Environment files
 *.env
+
+backend/config/serviceAccountKey.json
