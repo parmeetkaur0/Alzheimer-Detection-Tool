@@ -11,3 +11,4 @@ flask-backend/*.pyc
 *.env
 
 backend/config/serviceAccountKey.json
+"backend/models/alzheimer_cnn_model.h5" 
