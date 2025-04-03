@@ -6,6 +6,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PatientForm from "./components/PatientForm";
 import Profile from "./components/Profile";
 import Start from "./components/Start";
+import LandingPage from "./pages/LandingPage";
+import PredictionResult from "./components/PredictionResult";
 
 const App = () => {
   return (
@@ -16,6 +18,7 @@ const App = () => {
         <Route path="/patientForm" element={<PatientForm />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/result" element={<PredictionResult />} />
         <Route
           path="/dashboard"
           element={
@@ -25,7 +28,7 @@ const App = () => {
           }
         />
   
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </Router>
   );

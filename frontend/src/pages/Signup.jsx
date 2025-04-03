@@ -10,7 +10,7 @@ const InputField = ({ type, placeholder, value, onChange }) => (
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="mb-4 p-3 border rounded w-full"
+        className="mb-4 p-3 border rounded w-full bg-transparent border-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-[#0E9272]"
     />
 );
 
@@ -58,19 +58,6 @@ const Signup = () => {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
 
-            // const idToken = await user.getIdToken();
-            // await axios.post(
-            //     "http://localhost:5000/api/auth/user",
-            //     {
-            //         uid: user.uid,
-            //         email: user.email,
-            //         username: user.displayName || "Google User",
-            //     },
-            //     {
-            //         headers: { Authorization: `Bearer ${idToken}` },
-            //     }
-            // );
-
             navigate("/patientform");
         } catch (error) {
             setError(error.message);
@@ -78,8 +65,8 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-            <div className="bg-white py-5 px-8 my-5 h-full rounded shadow-md w-full max-w-md">
+        <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-[#0E9272] to-[#156c56] text-white">
+            <div className="bg-opacity-10 py-5 px-8 my-5 h-full rounded-lg shadow-lg w-full max-w-md backdrop-blur-lg">
                 <h2 className="text-3xl font-semibold mb-6 text-center">Signup</h2>
                 {error && <p className="text-red-500 mb-4">{error}</p>}
 
@@ -102,12 +89,12 @@ const Signup = () => {
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="p-3 border rounded w-full"
+                        className="p-3 border rounded w-full bg-transparent border-gray-400 text-white"
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-[#0E9272]"
                     >
                         {showPassword ? "Hide" : "Show"}
                     </button>
@@ -119,12 +106,12 @@ const Signup = () => {
                         placeholder="Confirm Password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="p-3 border rounded w-full"
+                        className="p-3 border rounded w-full bg-transparent border-gray-400 text-white"
                     />
                     <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-[#0E9272]"
                     >
                         {showConfirmPassword ? "Hide" : "Show"}
                     </button>
@@ -133,16 +120,14 @@ const Signup = () => {
                 <button
                     onClick={handleSignup}
                     disabled={isLoading}
-                    className={`${isLoading ? "bg-[#156c56]" : "bg-[#0E9272]"
-                        } text-white px-4 py-2 rounded w-full mb-4 transition duration-200`}
+                    className={`text-white px-4 py-2 rounded w-full mb-4 transition duration-200 ${isLoading ? "bg-[#156c56]" : "bg-[#0E9272]"}`}
                 >
                     {isLoading ? "Signing Up..." : "Signup"}
                 </button>
 
                 <div className="text-center">
-                    <Link to="/login" className="text-black hover:underline">
-                        Already have an account?{" "}
-                        <span className="text-[#0E9272]">Login</span>
+                    <Link to="/login" className="text-white hover:underline">
+                        Already have an account? <span className="text-[#0E9272]">Login</span>
                     </Link>
                 </div>
 

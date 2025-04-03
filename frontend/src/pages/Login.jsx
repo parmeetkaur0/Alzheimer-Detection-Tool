@@ -2,9 +2,9 @@ import { useState } from "react";
 import { auth, googleProvider } from "../config/firebase.config";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios"; 
+import axios from "axios";
 
-const Login = () => {
+const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,78 +28,93 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
-
-        // 🌐 Send Google user data to backend
-        // const idToken = await user.getIdToken();
-        // await axios.post(
-        //     "http://localhost:5000/api/auth/user",
-        //     {
-        //         uid: user.uid,
-        //         email: user.email,
-        //         username: user.displayName || "Google User",
-        //     },
-        //     {
-        //         headers: { Authorization: `Bearer ${idToken}` },
-        //     }
-        // );
-
-        navigate("/patientform");
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+      await axios.post(
+        "http://localhost:5000/api/auth/user",
+        {
+          uid: user.uid,
+          email: user.email,
+          username: user.displayName || "Google User",
+        },
+        {
+          headers: { Authorization: `Bearer ${idToken}` }
+        }
+      );
+      navigate("/dashboard");
     } catch (error) {
-        setError(error.message);
+      setError(error.message);
     }
-};
-
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-semibold mb-6 text-center">Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-r from-gray-100 to-blue-100 bg-opacity-80 z-50">
+      <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md relative border border-gray-200">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl">✖</button>
+        
+        <h2 className="text-4xl font-bold text-transparent  bg-clip-text bg-gradient-to-br from-green-200 via-teal-400 to-blue-600 mb-5 text-center">Login</h2>
+        
+        {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
+        
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mb-4 p-3 border rounded w-full"
+          className="mb-4 p-3 rounded-lg w-full border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500"
         />
+        
         <div className="relative w-full mb-6">
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="p-3 border rounded w-full"
+            className="p-3 rounded-lg w-full border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            className="absolute inset-y-0 right-3 text-sm text-gray-600 hover:text-gray-800"
           >
             {showPassword ? "Hide" : "Show"}
           </button>
         </div>
-        <button onClick={handleLogin} className="bg-[#0E9272] text-white px-4 py-2 rounded w-full mb-4 ">
+
+        <button
+          onClick={handleLogin}
+          className="bg-gradient-to-br from-green-200 via-teal-400 to-blue-600 text-white px-6 py-3 rounded-full w-full font-semibold shadow-md hover:scale-105 transform transition duration-300 mb-4"
+        >
           Login
         </button>
-        <div className="text-center">
-          <Link to="/signup" className="text-black hover:underline">Don't have an account? <span className="text-[#0E9272]">Sign up</span></Link>
-        </div>
-        <div className="flex items-center my-5">
-      <hr className="flex-grow border-t border-gray-300" />
-      <span className="px-3 text-gray-500 font-semibold">OR</span>
-      <hr className="flex-grow border-t border-gray-300" />
-    </div>
 
-        
-        <button onClick={handleGoogleLogin} className="bg-white text-lg text-black px-4 py-2 rounded w-full mb-4 border-gray-700 border-1">Contine with
-         <img src="https://imgs.search.brave.com/SEjcAO4DhX2p9W8EVfWIz5Yt1A0IvSsEfPlaFutv69M/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/ZWRpZ2l0YWxhZ2Vu/Y3kuY29tLmF1L3dw/LWNvbnRlbnQvdXBs/b2Fkcy9nb29nbGUt/bG9nby1wbmctdHJh/bnNwYXJlbnQtYmFj/a2dyb3VuZC1sYXJn/ZS1uZXctMTAyNHgz/NDYucG5n" className="inline-block w-16 h-5 ml-1.5" />  
-         </button>
-        
+        <div className="text-center mb-4">
+          <Link to="/signup" className="text-gray-600">
+            Don't have an account? <span className="text-cyan-500">Sign Up</span>
+          </Link>
+        </div>
+
+        <div className="flex items-center mb-4">
+          <hr className="flex-grow border-gray-300" />
+          <span className="px-3 text-gray-500 font-medium">OR</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        <button
+          onClick={handleGoogleLogin}
+          className="bg-white border border-gray-300 text-lg text-black px-6 py-3 rounded-full w-full font-semibold flex items-center justify-center gap-2 hover:shadow-lg transition duration-300"
+        >
+          <img
+            src="https://imgs.search.brave.com/ZyNDsok-KqN5jBJ5XqiFz-Ja9ltWWIzEKh_m1aWyc-M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly8xMDAw/bG9nb3MubmV0L3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDE2LzEx/L05ldy1Hb29nbGUt/TG9nby00OTd4NTAw/LmpwZw"
+            alt="Google Icon"
+            className="w-6 h-6"
+          />
+          Continue with Google
+        </button>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Login;                

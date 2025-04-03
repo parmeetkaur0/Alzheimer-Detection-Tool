@@ -1,122 +1,132 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Upload, BrainCog } from "lucide-react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import UploadMRI from "../components/UploadMri";
+import CognitiveTesting from "../components/CognitiveTests";
+import About from "../components/About";
+import Profile from "../components/Profile";
+import ContactUs from "../components/Contact";
+import { Upload, Brain, Menu, Info, User, Phone, LogOut } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useState } from "react";
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const [dragActive, setDragActive] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState(""); // For showing upload status
+  const [activeComponent, setActiveComponent] = useState("Upload MRI");
+  const [isOpen, setIsOpen] = useState(true);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
-
-  const handleDragLeave = () => setDragActive(false);
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragActive(false);
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      setSelectedFile(file);
+  // Function to render components based on selection
+  const renderContent = () => {
+    switch (activeComponent) {
+      case "Upload MRI":
+        return <UploadMRI />;
+      case "Cognitive Testing":
+        return <CognitiveTesting />;
+      case "About":
+        return <About />;
+      case "Profile":
+        return <Profile />;
+      case "Contact Us":
+        return <ContactUs />;
+      default:
+        return <UploadMRI />;
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      setUploadStatus("Please select a file to upload.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("mriScan", selectedFile);
-
-    try {
-      setUploadStatus("Uploading...");
-      const response = await axios.post("http://localhost:5000/api/upload", formData);
-      setUploadStatus("Upload successful! Analyzing the scan...");
-      console.log("Upload response:", response.data);
-      // Redirect or trigger analysis here if needed
-    } catch (error) {
-      console.error("Upload error:", error);
-      setUploadStatus("Upload failed. Please try again.");
-    }
-  };
+  const menuItems = [
+    { name: 'Upload MRI', icon: <Upload size={20} /> },
+    { name: 'Cognitive Testing', icon: <Brain size={20} /> },
+    { name: 'About', icon: <Info size={20} /> },
+    { name: 'Contact Us', icon: <Phone size={20} /> },
+  ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <Navbar />
-
-      <div className=" py-6">
-        <div className="max-w-6xl mx-auto text-center px-4">
-          <h2 className="text-2xl text-[#0E9272] font-bold mb-2">About Alzheimer's</h2>
-          <p className="text-lg text-gray-600">
-            Alzheimer's disease is a progressive neurological disorder that causes brain cells to degenerate and die. It is the most common cause of dementia, affecting memory, thinking, and social abilities.
-          </p>
+    <div>
+      {/* Navbar for small devices */}
+      <div className="md:hidden bg-gray-900 text-white p-4 flex justify-between items-center">
+        <div onClick={() => setIsNavbarOpen(!isNavbarOpen)} className="cursor-pointer">
+          <Menu size={24} />
         </div>
+        <span>Dashboard</span>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8 max-w-6xl mx-auto px-4">
-        <div className="bg-white shadow-lg rounded-lg p-6 text-center border border-gray-200">
-          <Upload className="w-12 h-12 text-[#0E9272] mb-4 mx-auto" />
-          <h2 className="text-xl font-semibold mb-2 text-[#0E9272]">Upload MRI Scans</h2>
-          <p className="text-gray-600 mb-4">
-            Upload MRI scans to analyze and detect signs of Alzheimer’s.
-          </p>
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-md p-4 mb-4 ${
-              dragActive ? "border-[#0E9272] bg-gray-100" : "border-gray-300"
-            }`}
-          >
-            <p className="text-gray-500">
-              Drag & drop MRI scans here or{" "}
-              <label className="text-[#0E9272] cursor-pointer underline">
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-                browse
-              </label>
-            </p>
+
+      {isNavbarOpen && (
+        <div className="md:hidden bg-gray-900 text-white p-4">
+          <ul className="space-y-4">
+            {menuItems.map((item, index) => (
+              <li
+                key={index}
+                className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 cursor-pointer"
+                onClick={() => {
+                  setActiveComponent(item.name);
+                  setIsNavbarOpen(false);
+                }}
+              >
+                {item.icon}
+                <span>{item.name}</span>
+              </li>
+            ))}
+            <li onClick={handleLogout} className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 cursor-pointer">
+              <LogOut size={20} />
+              <span>Logout</span>
+            </li>
+          </ul>
+        </div>
+      )}
+
+      {/* Main Content for small devices */}
+      <div className="md:hidden p-4">
+        {renderContent()}
+      </div>
+
+      <div className="hidden md:flex h-auto">
+        {/* Sidebar for large devices and iPads */}
+        <motion.div
+          animate={{ width: isOpen ? 240 : 60 }}
+          className="bg-gray-900 text-white p-4 h-full fixed flex flex-col justify-between"
+        >
+          <div>
+            <div
+              onClick={() => setIsOpen(!isOpen)}
+              className="cursor-pointer p-2 hover:bg-gray-700 rounded-md"
+            >
+              <Menu size={24} />
+            </div>
+            <ul className="mt-8 space-y-4">
+              {menuItems.map((item, index) => (
+                <li
+                  key={index}
+                  className={`flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 cursor-pointer ${
+                    activeComponent === item.name ? "bg-gray-700" : ""
+                  }`}
+                  onClick={() => setActiveComponent(item.name)}
+                >
+                  {item.icon}
+                  {isOpen && <span>{item.name}</span>}
+                </li>
+              ))}
+            </ul>
           </div>
-          <button
-            onClick={handleUpload}
-            className="bg-[#0E9272] text-white px-4 py-2 rounded-md hover:bg-[#0C7A5E] transition"
+          <div
+            className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 cursor-pointer mt-auto"
+            onClick={handleLogout}
           >
-            Upload Scans
-          </button>
-          {uploadStatus && <p className="text-gray-600 mt-2">{uploadStatus}</p>}
-        </div>
+            <LogOut size={20} />
+            {isOpen && <span>Logout</span>}
+          </div>
+        </motion.div>
 
-        <div className="bg-white shadow-lg rounded-lg p-7 text-center border border-gray-200">
-          <BrainCog className="w-12 h-12 text-[#0E9272] mb-4 mx-auto" />
-          <h2 className="text-xl font-semibold mb-2 text-[#0E9272]">
-            No MRI Scans? Take Cognitive Tests
-          </h2>
-          <p className="text-gray-600 mb-4">
-            Cognitive tests are designed to evaluate memory, attention, language skills, and problem-solving abilities. They play a crucial role in identifying early signs of Alzheimer's disease. 
-          </p>
-          <button className="bg-[#0E9272] text-white px-4 py-2 rounded-md hover:bg-[#0C7A5E] transition">
-            Start Tests
-          </button>
+        {/* Main Content for large devices */}
+        <div className={`transition-all duration-300 ${isOpen ? "ml-[240px]" : "ml-[60px]"} flex-1 h-full px-6 py-3 bg-gradient-to-r from-gray-100 to-blue-100`}>  
+          {renderContent()}
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
