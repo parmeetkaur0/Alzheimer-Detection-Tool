@@ -6,9 +6,10 @@ export default function LandingPage() {
     const navigate = useNavigate();
 
     const stats = [
-        { label: "Patients Diagnosed", value: "1.2M+" },
-        { label: "AI Accuracy", value: "98%" },
-        { label: "Countries Served", value: "50+" }
+        { label: "Global Alzheimer's Patients", value: "55M+" },
+        { label: "Alzheimer's Patients Expected by 2050", value: "139M+" },
+        // { label: "Annual New Cases Globally", value: "10M+" },
+        { label: "AI Diagnostic Accuracy", value: "98%" }
     ];
 
     return (
@@ -25,7 +26,7 @@ export default function LandingPage() {
             <section className="mb-12 p-4 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
                     <motion.div
                         className="p-6 h-40 bg-cover bg-center text-white rounded-lg shadow-lg relative overflow-hidden hover:scale-105 transform transition-transform duration-300"
-                        style={{ backgroundImage: `url("https://imgs.search.brave.com/oODyTG-yw7vWw-UL2gVXCZ5R2su0ZBHO7fVNBBxvKQ0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dG91Y2hzdG9uZWlt/YWdpbmcuY29tL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDIyLzA1/L01SSV9TY2FuLTEw/MjR4NTM2LmpwZw")` }}
+                        style={{ backgroundImage:` url("https://imgs.search.brave.com/oODyTG-yw7vWw-UL2gVXCZ5R2su0ZBHO7fVNBBxvKQ0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dG91Y2hzdG9uZWlt/YWdpbmcuY29tL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDIyLzA1/L01SSV9TY2FuLTEw/MjR4NTM2LmpwZw")` }}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
@@ -51,7 +52,7 @@ export default function LandingPage() {
 
                     <motion.div
                         className="p-6 bg-cover h-40 bg-center text-white rounded-lg shadow-lg relative overflow-hidden hover:scale-105 transform transition-transform duration-300"
-                        style={{ backgroundImage: `url("https://imgs.search.brave.com/vm_CLfa_6NWpMYh6Hv1h9wNgl4ws9kb3bomvpeRKj5k/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9tZWRpY2FsLXJl/Y29yZHMtdGVzdC1y/ZXBvcnRfNzMxMTAt/NzM2My5qcGc_c2Vt/dD1haXNfaHlicmlk")` }}
+                        style={{ backgroundImage: `url("https://imgs.search.brave.com/vm_CLfa_6NWpMYh6Hv1h9wNgl4ws9kb3bomvpeRKj5k/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9tZWRpY2FsLXJl/Y29yZHMtdGVzdC1y/ZXBvcnRfNzMxMTAt/NzM2My5qcGc_c2Vt/dD1haXNfaHlicmlk") `}}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 1 }}
@@ -62,7 +63,6 @@ export default function LandingPage() {
                         <p className="text-sm relative z-10">Get detailed analysis and reports for better medical consultation.</p>
                     </motion.div>
                 </section>
-
 
 
             <section className="flex justify-around mb-10">

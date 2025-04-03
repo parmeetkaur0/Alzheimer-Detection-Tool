@@ -42,16 +42,16 @@ const MedicalReport = ({ result, userDetails }) => {
 
   return (
     <div className='bg-gradient-to-r from-gray-100 to-blue-100 flex items-center justify-center'>
-      <div className=" bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-700 px-6 py-10 rounded-xl shadow-lg w-full max-w-xl mx-auto">
+      <div className=" bg-gradient-to-br from-green-200 via-teal-400 to-blue-600 px-6 py-10 rounded-xl shadow-lg w-full max-w-xl mx-auto">
         <div className="text-center mb-6">
           <FileText className="w-12 h-12 text-white mx-auto" />
           <h2 className="text-2xl font-bold text-white mt-2">Prediction Result</h2>
         </div>
         <div className="bg-white p-6 rounded-md shadow-md">
-          <p className="text-lg font-semibold text-gray-700">Diagnosis: Alzheimer’s Stage - <span className='text-green-500'> {result} </span></p>
-          <p className="mt-2 text-gray-600">Patient Name: {userDetails.patientName}</p>
-          <p className="text-gray-600">Age: {userDetails.patientAge}</p>
-          <p className="text-gray-600">Gender: {userDetails.patientGender}</p>
+          <p className="text-lg font-semibold text-gray-800">Diagnosis: Alzheimer’s Stage - <span className='text-teal-600'> {result} </span></p>
+          <p className="mt-2 text-gray-800 font-semibold">Patient Name: <span className='text-teal-500'>{userDetails.patientName}</span></p>
+          <p className="text-gray-800 font-semibold">Age: <span className='text-teal-500'>{userDetails.patientAge}</span></p>
+          <p className="text-gray-800 font-semibold">Gender: <span className='text-teal-500'>{userDetails.patientGender}</span></p>
           <div className="mt-4">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={stages}>
@@ -62,9 +62,9 @@ const MedicalReport = ({ result, userDetails }) => {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <div className='flex justify-center'>
+          {/* <div className='flex justify-center'>
             <button onClick={generatePDF} className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-400 to-green-400 text-white rounded-lg shadow-lg hover:opacity-90 transition duration-200">Download Report</button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
