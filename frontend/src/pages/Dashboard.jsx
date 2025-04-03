@@ -81,7 +81,7 @@ const Dashboard = () => {
       )}
 
       {/* Main Content for small devices */}
-      <div className="md:hidden p-4">
+      <div className="md:hidden p-3 min-h-screen flex justify-center items-center  ">
         {renderContent()}
       </div>
 
@@ -123,9 +123,10 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Main Content for large devices */}
-        <div className={`transition-all duration-300 ${isOpen ? "ml-[240px]" : "ml-[60px]"} flex-1 h-full px-6 py-3 bg-gradient-to-r from-gray-100 to-blue-100`}>  
-          {renderContent()}
-        </div>
+       
+      <div className={`flex-1 p-6 ${isOpen ? 'md:ml-[240px]' : 'md:ml-[60px]'} min-h-screen flex justify-center items-center bg-gradient-to-r from-gray-100 to-blue-100`}>  
+        {renderContent()}
+      </div>
       </div>
     </div>
   );
