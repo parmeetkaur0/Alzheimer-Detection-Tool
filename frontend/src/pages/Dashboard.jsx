@@ -1,5 +1,5 @@
 import UploadMRI from "../components/UploadMri";
-import CognitiveTesting from "../components/CognitiveTests";
+import CognitiveTesting from "../components/CognitiveExercise";
 import About from "../components/About";
 import Profile from "../components/Profile";
 import ContactUs from "../components/Contact";
