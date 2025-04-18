@@ -86,7 +86,6 @@ const CognitiveExercise = () => {
           const sentimentRes = await axios.post('http://localhost:5000/sentiment-analysis', { text: transcription });
           const sentimentScore = sentimentRes.data.sentimentScore;
 
-          // Simulate memory score for now
           const memoryScore = Math.floor(Math.random() * 100);
 
           setResponses(prev => [
@@ -143,7 +142,7 @@ const CognitiveExercise = () => {
     const doc = new jsPDF();
     doc.setFontSize(16);
     doc.text("Cognitive Test Report", 20, 20);
-  
+
     responses.forEach((res, i) => {
       const y = 30 + i * 30;
       doc.setFontSize(12);
@@ -152,124 +151,117 @@ const CognitiveExercise = () => {
       doc.text(`Sentiment Score: ${sentimentScores[i]?.toFixed(2) || "-"}`, 20, y + 20);
       doc.text(`Memory Score: ${memoryScores[i]?.toFixed(2) || "-"}`, 100, y + 20);
     });
-  
+
     doc.save("Cognitive-Test-Report.pdf");
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Cognitive Test</h1>
+    <div className="p-4 min-h-screen flex justify-center items-center ">
+      <div className="max-w-4xl w-full">
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-800">🧠 Cognitive Test</h1>
 
-      {!isLastQuestion && (
-        <>
-          <p className="mb-2 font-medium">{questions[currentQuestionIndex]}</p>
+        <div className="bg-white/70 backdrop-blur-md shadow-lg rounded-2xl p-6">
+          {!isLastQuestion && (
+            <div className="flex flex-col justify-center items-center min-h-[300px] text-center">
+              <p className="mb-4 text-lg font-semibold text-gray-800">{questions[currentQuestionIndex]}</p>
 
-          {!isRecording && !recordedBlob && (
-            <button
-              onClick={startRecording}
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Start Recording
-            </button>
-          )}
+              {!isRecording && !recordedBlob && (
+                <button
+                  onClick={startRecording}
+                  className="px-5 py-2 bg-gradient-to-br from-green-200 via-teal-400 to-blue-600 text-white rounded-lg shadow"
+                >
+                  🎤 Start Recording
+                </button>
+              )}
 
-          {isRecording && (
-            <button
-              onClick={stopRecording}
-              className="px-4 py-2 bg-red-500 text-white rounded"
-            >
-              Stop Recording
-            </button>
-          )}
+              {isRecording && (
+                <button
+                  onClick={stopRecording}
+                  className="px-5 py-2 bg-red-600 text-white rounded-lg shadow"
+                >
+                  ⏹️ Stop Recording
+                </button>
+              )}
 
-          {recordedBlob && (
-            <>
-              <audio controls src={URL.createObjectURL(recordedBlob)} className="mt-2" />
-              <button
-                onClick={uploadAndTranscribe}
-                disabled={isUploading}
-                className="ml-2 px-4 py-2 bg-green-600 text-white rounded"
-              >
-                {isUploading ? "Processing..." : "Upload & Next"}
-              </button>
-            </>
-          )}
-        </>
-      )}
-
-      {isLastQuestion && (
-        <div className="mt-10 px-6">
-          <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">🧠 Cognitive Test Results</h2>
-
-          <div className="flex flex-col lg:flex-row gap-6">
-
-            {/* Left Column: Transcriptions */}
-            <div className="w-full lg:w-1/2 bg-gray-50 p-4 rounded-2xl shadow-md">
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">📝 Transcriptions</h3>
-              {responses.map((res, idx) => (
-                <div key={idx} className="mb-4 border-b pb-2">
-                  <p className="font-medium text-gray-800">Q{idx + 1}: {res.question}</p>
-                  <p className="text-gray-600 italic">“{res.transcription}”</p>
-                  <audio controls src={res.audioURL} className="mt-1 w-full" />
+              {recordedBlob && (
+                <div className="mt-4 space-y-2 w-full">
+                  <audio controls src={URL.createObjectURL(recordedBlob)} className="w-full rounded-md" />
+                  <button
+                    onClick={uploadAndTranscribe}
+                    disabled={isUploading}
+                    className="w-full px-4 py-2 bg-gradient-to-br from-green-200 via-teal-400 to-blue-600 text-white rounded-lg shadow"
+                  >
+                    {isUploading ? "⏳ Processing..." : "📤 Upload & Next"}
+                  </button>
                 </div>
-              ))}
-              <button
-                onClick={handleDownloadPDF}
-                className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md w-full text-sm font-medium"
-              >
-                📄 Download Report as PDF
-              </button>
+              )}
             </div>
+          )}
 
-            {/* Right Column: Graphs */}
-            <div className="w-full lg:w-1/2 space-y-6">
-              <div className="bg-white p-4 rounded-2xl shadow-md">
-                <h3 className="text-lg font-semibold mb-2 text-center text-blue-600">Sentiment Over Time</h3>
-                <div className="h-64">
-                  <Line
-                    data={sentimentData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: { display: false },
-                        title: { display: false }
-                      },
-                      scales: {
-                        y: { beginAtZero: true, ticks: { stepSize: 20 } }
-                      }
-                    }}
-                  />
+          {isLastQuestion && (
+            <div className="mt-5">
+              <h2 className="text-2xl font-bold text-center mb-8 text-blue-900">📊 Cognitive Test Results</h2>
+
+              <div className="flex flex-col lg:flex-row gap-6">
+                <div className="w-full lg:w-1/2 bg-gradient-to-br from-white to-gray-100 p-4 rounded-2xl shadow-lg">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-800">📝 Transcriptions</h3>
+                  {responses.map((res, idx) => (
+                    <div key={idx} className="mb-4 border-b border-gray-300 pb-3">
+                      <p className="font-medium text-gray-900">Q{idx + 1}: {res.question}</p>
+                      <p className="text-gray-600 italic">“{res.transcription}”</p>
+                      <audio controls src={res.audioURL} className="mt-2 w-full rounded-md" />
+                    </div>
+                  ))}
+                  <button
+                    onClick={handleDownloadPDF}
+                    className="mt-4 px-4 py-2 bg-gradient-to-br from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-md w-full font-medium shadow-md"
+                  >
+                    📄 Download Report as PDF
+                  </button>
                 </div>
-              </div>
 
-              <div className="bg-white p-4 rounded-2xl shadow-md">
-                <h3 className="text-lg font-semibold mb-2 text-center text-purple-600">Memory Score Over Time</h3>
-                <div className="h-64">
-                  <Line
-                    data={memoryData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: { display: false },
-                        title: { display: false }
-                      },
-                      scales: {
-                        y: { beginAtZero: true, ticks: { stepSize: 20 } }
-                      }
-                    }}
-                  />
+                <div className="w-full lg:w-1/2 space-y-6">
+                  <div className="bg-white p-4 rounded-2xl shadow-lg">
+                    <h3 className="text-lg font-semibold text-center text-blue-700 mb-2">📈 Sentiment Over Time</h3>
+                    <div className="h-64">
+                      <Line data={sentimentData} options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: { display: false },
+                          title: { display: false }
+                        },
+                        scales: {
+                          y: { beginAtZero: true, ticks: { stepSize: 20 } }
+                        }
+                      }} />
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-2xl shadow-lg">
+                    <h3 className="text-lg font-semibold text-center text-purple-700 mb-2">🧠 Memory Score Over Time</h3>
+                    <div className="h-64">
+                      <Line data={memoryData} options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: { display: false },
+                          title: { display: false }
+                        },
+                        scales: {
+                          y: { beginAtZero: true, ticks: { stepSize: 20 } }
+                        }
+                      }} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
 export default CognitiveExercise;
-
-

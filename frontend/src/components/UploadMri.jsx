@@ -104,13 +104,19 @@ const UploadMRI = () => {
   // Render Upload MRI form if prediction not available
   return (
     <div className="bg-gradient-to-r from-gray-100 to-blue-100 w-full">
+      
       <div className="bg-white p-5 px-10 rounded-2xl shadow-xl border border-gray-200 w-full max-w-lg mx-auto">
         <Upload className="w-12 h-12 text-cyan-500 mb-2 mx-auto" />
         <h2 className="text-3xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-br from-green-200 via-teal-400 to-blue-600">
           Upload MRI Scans
         </h2>
         <p className="text-gray-600 text-center mb-4">Upload MRI scans to analyze and detect signs of Alzheimer’s.</p>
-
+        {uploadStatus && <p className="text-red-500 text-lg mt-4 text-center">{uploadStatus}</p>}
+        {uploadStatus.includes("Prediction failed") && (
+          <p className="text-red-500 text-lg text-center">
+            Please, Give Valid MRI Scan. <span className="text-red-500">Try again!</span>
+          </p>
+        )}
         <input
           type="text"
           placeholder="Patient Name"
@@ -167,7 +173,7 @@ const UploadMRI = () => {
         >
           Upload and Predict
         </button>
-        {uploadStatus && <p className="text-gray-600 text-lg mt-4 text-center">{uploadStatus}</p>}
+     
       </div>
     </div>
   );
